@@ -70,7 +70,6 @@ class NHListAvatar extends Component {
             time: "58F"
           };
         });
-        console.log(rData.length);
         this.setState(
           {
             dataSource: rData
@@ -83,8 +82,13 @@ class NHListAvatar extends Component {
       });
   }
 
-  navigateTo() {
-    this.props.navigation.navigate("Settings");
+  keyExtractor = (item, index) => index.toString()
+
+  navigateTo(item) {
+    this.props.navigation.navigate("Settings",
+    {
+      roomId: item.id
+    });
   }
 
   render() {
@@ -100,14 +104,13 @@ class NHListAvatar extends Component {
         <List>
           <FlatList
             data={dataSource}
+            keyExtractor={this.keyExtractor}
             renderItem={({ item }) => (
               <ListItem
-                key={item.text}
                 subtitle={item.note}
                 title={item.text}
                 rightTitle={item.time}
-                keyExtractor={item => item.text}
-                onPress={ this.navigateTo.bind(this) }
+                onPress={ this.navigateTo.bind(this, item) }
               />
             )}
           />
