@@ -2,6 +2,8 @@ import React from "react";
 import { View } from "react-native";
 import { LineChart, YAxis, Grid } from "react-native-svg-charts";
 import "react-native-svg";
+import { Button } from "react-native-elements";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class SettingsScreen extends React.Component {
   // {"id":68,"room_id":2,"temperature":22,"humidity":44,"record_date":"2018-12-04T09:23:39.000Z"}
@@ -14,8 +16,11 @@ export default class SettingsScreen extends React.Component {
     };
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot){
-    if(prevProps.navigation.getParam("roomId", "NO-ID") === this.props.navigation.getParam("roomId", "NO-ID"))
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (
+      prevProps.navigation.getParam("roomId", "NO-ID") ===
+      this.props.navigation.getParam("roomId", "NO-ID")
+    )
       return;
 
     const { navigation } = this.props;
@@ -24,9 +29,9 @@ export default class SettingsScreen extends React.Component {
     fetch("http://145.24.222.236:8080/api/logs")
       .then(response => response.json())
       .then(rooms => {
-
-        console.log(rooms
-          .filter(x => x.room_id.toString() == roomId.toString()));
+        console.log(
+          rooms.filter(x => x.room_id.toString() == roomId.toString())
+        );
 
         const rData = rooms
           .filter(x => x.room_id.toString() == roomId.toString())
@@ -73,7 +78,7 @@ export default class SettingsScreen extends React.Component {
               humidity: x.humidity,
               record_date: x.record_date
             };
-          })
+          });
         const temperatures = rData.map(x => x.temperature);
         this.setState(
           {
@@ -95,25 +100,31 @@ export default class SettingsScreen extends React.Component {
       : [35, 78, -87];
     const contentInset = { top: 5, bottom: 5 };
     return (
-      <View style={{ height: 200, marginTop: 50, flexDirection: "row" }}>
-        <YAxis
-          data={data}
-          contentInset={contentInset}
-          svg={{
-            fill: "grey",
-            fontSize: 10
-          }}
-          numberOfTicks={10}
-          formatLabel={value => `${value}ºC`}
+      <View style={{ height: 200, marginTop: 100, flexDirection: "column" }}>
+        <Button
+          icon={<Icon name="arrow-left" size={15} color="white" />}
+          title="Go Back"
         />
-        <LineChart
-          style={{ flex: 1, marginLeft: 16 }}
-          data={data}
-          svg={{ stroke: "rgb(134, 65, 244)" }}
-          contentInset={contentInset}
-        >
-          <Grid />
-        </LineChart>
+        <View style={{ height: 200, marginTop: 50, flexDirection: "row" }}>
+          <YAxis
+            data={data}
+            contentInset={contentInset}
+            svg={{
+              fill: "grey",
+              fontSize: 10
+            }}
+            numberOfTicks={10}
+            formatLabel={value => `${value}ºC`}
+          />
+          <LineChart
+            style={{ flex: 1, marginLeft: 16 }}
+            data={data}
+            svg={{ stroke: "rgb(134, 65, 244)" }}
+            contentInset={contentInset}
+          >
+            <Grid />
+          </LineChart>
+        </View>
       </View>
     );
   }
