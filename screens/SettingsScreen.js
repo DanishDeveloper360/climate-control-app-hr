@@ -43,7 +43,7 @@ export default class SettingsScreen extends React.Component {
             // to get a value that is either negative, positive, or zero.
             return new Date(b.record_date) - new Date(a.record_date);
           });
-        const temperatures = rooms.map(x => x.temperature);
+        const temperatures = rData.map(x => x.temperature);
         this.setState(
           {
             dataSource: rData,
